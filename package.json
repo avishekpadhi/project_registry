@@ -1,0 +1,18 @@
+{
+  "name": "basic-express-mongoose-server",
+  "version": "1.0.0",
+  "description": "A basic Express server with Mongoose and MongoDB connection.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.2.3"
+  }
+}
