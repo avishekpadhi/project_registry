@@ -8,5 +8,7 @@ export const ERROR_MESSAGES = {
     INVALID_SORT: "Invalid sort field",
     NOT_FOUND: "Project not found",
     INVALID_ID: "Invalid project ID",
+    INVALID_STATUS_TRANSITION: "Invalid project status transition",
+    STATUS_ALREADY_SET: "Project is already in the requested status",
   },
 };

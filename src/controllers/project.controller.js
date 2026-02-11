@@ -2,6 +2,7 @@ import {
   createProjectService,
   listProjectsService,
   getProjectByIdService,
+  updateProjectStatusService
 } from "../services/project.service.js";
 
 export const createProject = async (req, res) => {
@@ -53,3 +54,31 @@ export const getProjectById = async (req, res, next) => {
     });
   }
 };
+
+export const updateProjectStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!status) {
+      return res.status(400).json({
+        success: false,
+        message: "Status field is required",
+      });
+    }
+
+    const updatedProject = await updateProjectStatusService(id, status);
+
+    return res.status(200).json({
+      success: true,
+      message: "Project status updated successfully",
+      data: updatedProject,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+

@@ -1,6 +1,7 @@
 import { PROJECT_STATUS } from "../constants/constants.js";
 import { Project } from "../models/project.model.js";
 import { ERROR_MESSAGES } from "../constants/errors.js";
+import { STATUS_TRANSITIONS } from "../constants/projectStatus.js";
 import mongoose from "mongoose";
 
 // Create Project
@@ -74,7 +75,7 @@ export const listProjectsService = async (queryParams) => {
   return projects;
 };
 
-// Find a project 
+// Find a project
 
 export const getProjectByIdService = async (id) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -89,3 +90,43 @@ export const getProjectByIdService = async (id) => {
 
   return project;
 };
+
+// Update a project
+
+export const updateProjectStatusService = async (id, newStatus) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error(ERROR_MESSAGES.PROJECT.INVALID_ID);
+  }
+
+  if (!Object.values(PROJECT_STATUS).includes(newStatus)) {
+    throw new Error(ERROR_MESSAGES.PROJECT.INVALID_STATUS);
+  }
+
+  const project = await Project.findById(id);
+
+  if (!project) {
+    throw new Error(ERROR_MESSAGES.PROJECT.NOT_FOUND);
+  }
+
+  const currentStatus = project.status;
+
+  if (currentStatus === newStatus) {
+    throw new Error(ERROR_MESSAGES.PROJECT.STATUS_ALREADY_SET);
+  }
+
+  const allowedTransitions = STATUS_TRANSITIONS[currentStatus];
+
+  if (!allowedTransitions.includes(newStatus)) {
+    throw new Error(
+      `${ERROR_MESSAGES.PROJECT.INVALID_STATUS_TRANSITION}: ${currentStatus} → ${newStatus}`,
+    );
+  }
+
+  project.status = newStatus;
+  await project.save();
+
+  return project;
+};
+
+
+
