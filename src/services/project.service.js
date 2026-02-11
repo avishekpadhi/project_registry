@@ -1,6 +1,7 @@
 import { PROJECT_STATUS } from "../constants/constants.js";
 import { Project } from "../models/project.model.js";
 import { ERROR_MESSAGES } from "../constants/errors.js";
+import mongoose from "mongoose";
 
 // Create Project
 
@@ -57,7 +58,7 @@ export const listProjectsService = async (queryParams) => {
   }
 
   // Sorting
-  let sortOption = { createdAt: -1 }; 
+  let sortOption = { createdAt: -1 };
   if (sort) {
     const allowedSortFields = ["createdAt", "startDate"];
 
@@ -71,4 +72,20 @@ export const listProjectsService = async (queryParams) => {
   const projects = await Project.find(filter).sort(sortOption).lean();
 
   return projects;
+};
+
+// Find a project 
+
+export const getProjectByIdService = async (id) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error(ERROR_MESSAGES.PROJECT.INVALID_ID);
+  }
+
+  const project = await Project.findById(id).lean();
+
+  if (!project) {
+    throw new Error(ERROR_MESSAGES.PROJECT.NOT_FOUND);
+  }
+
+  return project;
 };

@@ -1,4 +1,8 @@
-import { createProjectService, listProjectsService } from "../services/project.service.js";
+import {
+  createProjectService,
+  listProjectsService,
+  getProjectByIdService,
+} from "../services/project.service.js";
 
 export const createProject = async (req, res) => {
   try {
@@ -16,7 +20,6 @@ export const createProject = async (req, res) => {
   }
 };
 
-
 export const listProjects = async (req, res) => {
   try {
     const projects = await listProjectsService(req.query);
@@ -25,6 +28,23 @@ export const listProjects = async (req, res) => {
       success: true,
       count: projects.length,
       data: projects,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getProjectById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const project = await getProjectByIdService(id);
+
+    return res.status(200).json({
+      success: true,
+      data: project,
     });
   } catch (error) {
     return res.status(400).json({

@@ -6,5 +6,7 @@ export const ERROR_MESSAGES = {
     INVALID_DATE_ORDER: "endDate cannot be before startDate",
     INVALID_STATUS: "Invalid project status",
     INVALID_SORT: "Invalid sort field",
+    NOT_FOUND: "Project not found",
+    INVALID_ID: "Invalid project ID",
   },
 };
