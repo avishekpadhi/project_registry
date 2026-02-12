@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { PROJECT_STATUSES } from "../src/constants.js";
+import { PROJECT_STATUS } from "../constants/projectStatus.js";
 
 const ProjectSchema = new mongoose.Schema(
   {
@@ -17,8 +17,8 @@ const ProjectSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: PROJECT_STATUSES,
-      default: PROJECT_STATUSES[0], 
+      enum: Object.values(PROJECT_STATUS),
+      default: PROJECT_STATUS.ACTIVE, 
       required: true,
     },
 
