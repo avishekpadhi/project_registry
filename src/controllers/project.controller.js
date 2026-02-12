@@ -14,7 +14,7 @@ export const createProject = async (req, res) => {
       data: project,
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message,
     });
@@ -31,7 +31,7 @@ export const listProjects = async (req, res) => {
       data: projects,
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message,
     });
@@ -48,7 +48,7 @@ export const getProjectById = async (req, res, next) => {
       data: project,
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message,
     });
@@ -75,10 +75,30 @@ export const updateProjectStatus = async (req, res) => {
       data: updatedProject,
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message,
     });
   }
 };
 
+
+import { deleteProjectService } from "../services/project.service.js";
+
+export const deleteProject = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await deleteProjectService(id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Project deleted successfully",
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
