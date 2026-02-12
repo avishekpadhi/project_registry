@@ -1,6 +1,7 @@
 export const ERROR_MESSAGES = {
   PROJECT: {
     REQUIRED_FIELDS: "name, clientName and startDate are required",
+    NON_EMPTY_STRINGS: "Project name and client name must be non-empty strings",
     INVALID_STATUS: "Invalid project status",
     INVALID_SORT: "Invalid sort field",
     INVALID_DATE_ORDER: "endDate cannot be before startDate",
@@ -10,5 +11,8 @@ export const ERROR_MESSAGES = {
     INVALID_ID: "Invalid project ID",
     INVALID_STATUS_TRANSITION: "Invalid project status transition",
     STATUS_ALREADY_SET: "Project is already in the requested status",
+    INVALID_START_DATE: "Invalid start date",
+    INVALID_END_DATE: "Invalid end date",
+
   },
 };

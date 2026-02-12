@@ -2,7 +2,8 @@ import {
   createProjectService,
   listProjectsService,
   getProjectByIdService,
-  updateProjectStatusService
+  updateProjectStatusService,
+  deleteProjectService
 } from "../services/project.service.js";
 
 export const createProject = async (req, res) => {
@@ -82,8 +83,6 @@ export const updateProjectStatus = async (req, res) => {
   }
 };
 
-
-import { deleteProjectService } from "../services/project.service.js";
 
 export const deleteProject = async (req, res) => {
   try {

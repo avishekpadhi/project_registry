@@ -5,7 +5,7 @@ import { AppError } from "./appError.js";
 
 export const findActiveProjectById = async (id, options = {}) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error(ERROR_MESSAGES.PROJECT.INVALID_ID, 400);
+    throw new AppError(ERROR_MESSAGES.PROJECT.INVALID_ID, 400);
   }
 
   const query = Project.findOne({

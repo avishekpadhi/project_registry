@@ -1,8 +1,8 @@
-import { PROJECT_STATUS } from "../constants/constants.js";
+import { PROJECT_STATUS } from "../constants/projectStatus.js";
 import { Project } from "../models/project.model.js";
 import { ERROR_MESSAGES } from "../constants/errors.js";
 import { STATUS_TRANSITIONS } from "../constants/projectStatus.js";
-import { findActiveProjectById } from "./utils/findActiveProject.js";
+import { findActiveProjectById } from "./utils/findActiveProjectById.js";
 import { AppError } from "./utils/appError.js";
 import mongoose from "mongoose";
 
@@ -11,7 +11,14 @@ import mongoose from "mongoose";
 export const createProjectService = async (data) => {
   const { name, clientName, status, startDate, endDate } = data;
 
-  if (!name || !clientName || !startDate) {
+  if (typeof name !== "string" || typeof clientName !== "string") {
+    throw new AppError(ERROR_MESSAGES.PROJECT.NON_EMPTY_STRINGS, 400);
+  }
+
+  const cleanedName = name.trim();
+  const cleanedClientName = clientName.trim();
+
+  if (!cleanedName || !cleanedClientName || !startDate) {
     throw new AppError(ERROR_MESSAGES.PROJECT.REQUIRED_FIELDS, 400);
   }
 
@@ -20,7 +27,14 @@ export const createProjectService = async (data) => {
   }
 
   const parsedStartDate = new Date(startDate);
+  if (isNaN(parsedStartDate.getTime())) {
+    throw new AppError(ERROR_MESSAGES.PROJECT.INVALID_START_DATE, 400);
+  }
+
   const parsedEndDate = endDate ? new Date(endDate) : null;
+  if (parsedEndDate && isNaN(parsedEndDate.getTime())) {
+    throw new AppError(ERROR_MESSAGES.PROJECT.INVALID_END_DATE, 400);
+  }
 
   if (parsedEndDate && parsedEndDate < parsedStartDate) {
     throw new AppError(ERROR_MESSAGES.PROJECT.INVALID_DATE_ORDER, 400);
@@ -104,7 +118,8 @@ export const updateProjectStatusService = async (id, newStatus) => {
 
   if (!allowedTransitions.includes(newStatus)) {
     throw new AppError(
-      `${ERROR_MESSAGES.PROJECT.INVALID_STATUS_TRANSITION}: ${currentStatus} → ${newStatus}`, 409
+      `${ERROR_MESSAGES.PROJECT.INVALID_STATUS_TRANSITION}: ${currentStatus} → ${newStatus}`,
+      409,
     );
   }
 
